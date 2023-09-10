@@ -1,5 +1,10 @@
 import "./App.css";
 
+interface courseParts {
+  name: string;
+  exercises: number;
+}
+
 const Header = (props: { courseName: string }) => {
   return (
     <>
@@ -19,55 +24,64 @@ const Part = (props: { partNumber: string; exerciseNumber: number }) => {
   );
 };
 
-const Content = (props: {
-  partNum1: string;
-  exerNum1: number;
-  partNum2: string;
-  exerNum2: number;
-  partNum3: string;
-  exerNum3: number;
-}) => {
+const Content = (props: { parts: Array<courseParts> }) => {
   return (
     <>
-      <Part partNumber={props.partNum1} exerciseNumber={props.exerNum1} />
-      <Part partNumber={props.partNum2} exerciseNumber={props.exerNum2} />
-      <Part partNumber={props.partNum3} exerciseNumber={props.exerNum3} />
+      <Part
+        partNumber={props.parts[0].name}
+        exerciseNumber={props.parts[0].exercises}
+      />
+      <Part
+        partNumber={props.parts[1].name}
+        exerciseNumber={props.parts[1].exercises}
+      />
+      <Part
+        partNumber={props.parts[2].name}
+        exerciseNumber={props.parts[2].exercises}
+      />
     </>
   );
 };
 
-const Total = (props: { num1: number; num2: number; num3: number }) => {
+const Total = (props: { parts: Array<courseParts> }) => {
   return (
     <>
       <p>
         Number of Exercises
-        <span>{props.num1 + props.num2 + props.num3}</span>
+        <span>
+          {props.parts[0].exercises +
+            props.parts[1].exercises +
+            props.parts[2].exercises}
+        </span>
       </p>
     </>
   );
 };
 
 const App = () => {
-  const course = "Half Stack Application Development";
-  const part1 = "Fundamentals of React";
-  const exercises1 = 10;
-  const part2 = "Using props to pass data";
-  const exercises2 = 7;
-  const part3 = "State of a Component";
-  const exercises3 = 14;
+  const course = {
+    name: "Half Stack Application Development",
+    parts: [
+      {
+        name: "Fundamentals of React",
+        exercises: 10,
+      },
+      {
+        name: "Using props to pass data",
+        exercises: 7,
+      },
+      {
+        name: "State of a Component",
+        exercises: 14,
+      },
+    ],
+  };
 
   return (
     <div>
-      <Header courseName={course} />
-      <Content
-        partNum1={part1}
-        exerNum1={exercises1}
-        partNum2={part2}
-        exerNum2={exercises2}
-        partNum3={part3}
-        exerNum3={exercises3}
-      />
-      <Total num1={exercises1} num2={exercises2} num3={exercises3} />
+      <Header courseName={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </div>
   );
 };
