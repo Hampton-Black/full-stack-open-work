@@ -8,6 +8,8 @@ function App() {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
+  const feedbackGiven = good !== 0 || neutral !== 0 || bad !== 0;
+
   return (
     <>
       <Feedback
@@ -18,7 +20,12 @@ function App() {
         handleClickBad={() => setBad(bad + 1)}
         buttonTextBad="Bad"
       />
-      <Statistics goodCount={good} neutralCount={neutral} badCount={bad} />
+      <h1>Statistics</h1>
+      {feedbackGiven ? (
+        <Statistics goodCount={good} neutralCount={neutral} badCount={bad} />
+      ) : (
+        <p>No Feedback provided yet</p>
+      )}
     </>
   );
 }
