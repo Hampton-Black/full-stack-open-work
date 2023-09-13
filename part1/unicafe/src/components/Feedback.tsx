@@ -1,6 +1,15 @@
-import { Button } from "./Button";
+import { Button, ButtonProps } from "./Button";
 
-export function Feedback(props) {
+export type FeedbackProps = {
+  handleClickGood: ButtonProps["handleClick"];
+  handleClickNeutral: ButtonProps["handleClick"];
+  handleClickBad: ButtonProps["handleClick"];
+  buttonTextGood: ButtonProps["buttonText"];
+  buttonTextNeutral: ButtonProps["buttonText"];
+  buttonTextBad: ButtonProps["buttonText"];
+};
+
+export function Feedback(props: FeedbackProps) {
   return (
     <>
       <Button
