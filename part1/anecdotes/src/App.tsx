@@ -2,8 +2,6 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [selected, setSelected] = useState(0);
-
   const anecdotes = [
     "If it hurts, do it more often.",
     "Adding manpower to a late software project makes it later!",
@@ -15,22 +13,29 @@ function App() {
     "The only way to go fast, is to go well.",
   ];
 
+  const votesArray: Array<number> = Array(anecdotes.length).fill(0);
+
+  const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(votesArray);
+
   const randomSelection = (min: number, max: number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min - 1)) + min;
+  };
+
+  const incrementVotes = () => {
+    const votesArrayCopy = [...votes];
+    votesArrayCopy[selected] += 1;
+    setVotes(votesArrayCopy);
   };
 
   return (
     <>
       <h1>{anecdotes[selected]}</h1>
-      <button
-        onClick={() => {
-          console.log(randomSelection(0, anecdotes.length));
-
-          return setSelected(randomSelection(0, anecdotes.length));
-        }}
-      >
+      <h2>has {votes[selected]} votes</h2>
+      <button onClick={incrementVotes}>Vote</button>
+      <button onClick={() => setSelected(randomSelection(0, anecdotes.length))}>
         Next Anecdote
       </button>
     </>
