@@ -1,4 +1,9 @@
-export function StatisticsLine(props) {
+export type StatisticsLineProps = {
+  text: string;
+  value: number;
+};
+
+export function StatisticsLine(props: StatisticsLineProps) {
   return (
     <>
       <tr>
