@@ -30,14 +30,31 @@ function App() {
     setVotes(votesArrayCopy);
   };
 
+  const highestVote = (array: number[]) => {
+    let max = array[0];
+    let index = 0;
+
+    for (let i = 0; i <= array.length; i++) {
+      if (array[i] > max) {
+        max = array[i];
+        index = i;
+      }
+    }
+    return { index, max };
+  };
+
   return (
     <>
-      <h1>{anecdotes[selected]}</h1>
-      <h2>has {votes[selected]} votes</h2>
+      <h1>Anecdote of the Day</h1>
+      <h2>{anecdotes[selected]}</h2>
+      <h3>has {votes[selected]} votes</h3>
       <button onClick={incrementVotes}>Vote</button>
       <button onClick={() => setSelected(randomSelection(0, anecdotes.length))}>
         Next Anecdote
       </button>
+      <h1>Anecdote with highest votes</h1>
+      <h2>{anecdotes[highestVote(votes).index]}</h2>
+      <h3>has {highestVote(votes).max} votes </h3>
     </>
   );
 }
