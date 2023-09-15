@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import "./App.css";
-
-interface person {
-  name: string;
-  number?: string;
-}
+import { Filter } from "./components/Filter";
+import { PersonForm } from "./components/PersonForm";
+import { Persons } from "./components/Persons";
 
 function App() {
   const [persons, setPersons] = useState([
@@ -18,7 +16,7 @@ function App() {
   const [filterString, setFilterString] = useState("");
   const [showAll, setShowAll] = useState(true);
 
-  const addName = (event) => {
+  const addName = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     const nameObject = {
       name: newName,
@@ -35,7 +33,9 @@ function App() {
     setNewNumber("");
   };
 
-  const filterNames = (event) => {
+  const filterNames = (event: {
+    target: { value: SetStateAction<string> };
+  }) => {
     setFilterString(event.target.value);
     setShowAll(false);
 
@@ -53,40 +53,17 @@ function App() {
   return (
     <>
       <h1 className="header">Phonebook</h1>
-      <div className="form-container">
-        <div>
-          Filter with:{" "}
-          <input type="text" value={filterString} onChange={filterNames} />
-        </div>
-      </div>
+      <Filter filterString={filterString} filterNames={filterNames} />
       <h2 className="header">Add new entry</h2>
-      <form className="form-container" onSubmit={addName}>
-        <div>
-          Name:{" "}
-          <input
-            value={newName}
-            onChange={(event) => setNewName(event.target.value)}
-          />
-        </div>
-        <div>
-          Number:{" "}
-          <input
-            value={newNumber}
-            onChange={(event) => setNewNumber(event.target.value)}
-          />
-        </div>
-        <div>
-          <button type="submit">Add</button>
-        </div>
-      </form>
+      <PersonForm
+        addName={addName}
+        newName={newName}
+        setNewName={setNewName}
+        newNumber={newNumber}
+        setNewNumber={setNewNumber}
+      />
       <h2 className="header">Numbers</h2>
-      <ul>
-        {personsToShow.map((person) => (
-          <li key={person.name}>
-            {person.name} - {person.number}
-          </li>
-        ))}
-      </ul>
+      <Persons personsToShow={personsToShow} />
     </>
   );
 }
