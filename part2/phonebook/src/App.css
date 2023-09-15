@@ -43,13 +43,22 @@
 
 .form-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: start;
+  align-items:flex-end;
+  flex-direction: column;
   gap: 5px;
+}
+
+.form-container button {
+  align-self: flex-start;
 }
 
 ul {
   list-style: none;
-  text-align: left;
-  padding-left: 6em;
+  text-align: right;
+  padding-left: 12em;
+}
+
+.header {
+  text-align: right;
 }
