@@ -3,7 +3,7 @@ import "./App.css";
 import { Filter } from "./components/Filter";
 import { PersonForm } from "./components/PersonForm";
 import { Persons, IPerson } from "./components/Persons";
-import axios from "axios";
+import personService from "./services/Persons";
 
 function App() {
   const [persons, setPersons] = useState([] as IPerson[]);
@@ -13,9 +13,9 @@ function App() {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
-    });
+    personService
+      .getAll()
+      .then((initialPersons: IPerson[]) => setPersons(initialPersons));
   }, []);
 
   const addName = (event: { preventDefault: () => void }) => {
@@ -30,8 +30,8 @@ function App() {
       return;
     }
 
-    axios.post("http://localhost:3001/persons", nameObject).then((response) => {
-      setPersons(persons.concat(response.data));
+    personService.create(nameObject).then((returnedPerson: IPerson) => {
+      setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
     });
