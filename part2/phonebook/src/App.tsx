@@ -25,18 +25,39 @@ function App() {
       number: newNumber,
     };
 
-    if (persons.find((person) => newName === person.name)) {
-      alert(`${newName} is already added to the phonebook`);
-      return;
-    }
+    const existingPerson = persons.find((person) => newName === person.name);
 
-    personService
-      .create(nameObject as IPerson)
-      .then((returnedPerson: IPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName("");
-        setNewNumber("");
-      });
+    if (existingPerson) {
+      const toUpdate = confirm(
+        `${newName} is already added to the phonebook, replace the old number with the new one?`
+      );
+
+      if (toUpdate) {
+        personService
+          .update(existingPerson.id, nameObject as IPerson)
+          .then((updatedPerson: IPerson) => {
+            setPersons(
+              persons.map((person) => {
+                if (person.id === updatedPerson.id) {
+                  return { ...person, number: updatedPerson.number };
+                } else {
+                  return person;
+                }
+              })
+            );
+            setNewName("");
+            setNewNumber("");
+          });
+      }
+    } else {
+      personService
+        .create(nameObject as IPerson)
+        .then((returnedPerson: IPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+        });
+    }
   };
 
   const filterNames = (event: {
