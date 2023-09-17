@@ -62,3 +62,9 @@ ul {
 .header {
   text-align: right;
 }
+
+button.small-btn {
+  padding: 0.1em 0.6em;
+  margin: 0.2em;
+  margin-left: 1em;
+}

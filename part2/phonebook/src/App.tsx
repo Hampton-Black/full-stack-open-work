@@ -30,11 +30,13 @@ function App() {
       return;
     }
 
-    personService.create(nameObject).then((returnedPerson: IPerson) => {
-      setPersons(persons.concat(returnedPerson));
-      setNewName("");
-      setNewNumber("");
-    });
+    personService
+      .create(nameObject as IPerson)
+      .then((returnedPerson: IPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
   };
 
   const filterNames = (event: {
@@ -67,7 +69,7 @@ function App() {
         setNewNumber={setNewNumber}
       />
       <h2 className="header">Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} setPersons={setPersons} />
     </>
   );
 }
