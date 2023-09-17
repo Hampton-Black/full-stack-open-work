@@ -8,11 +8,12 @@ export interface IPerson {
 
 export const Persons = (props) => {
   const deletePerson = async (person: IPerson) => {
-    alert(`Delete ${person.name}?`);
-    await personService.deletePerson(person.id);
-    props.setPersons(
-      props.personsToShow.filter((p: IPerson) => p.id !== person.id)
-    );
+    if (confirm(`Delete ${person.name}?`)) {
+      await personService.deletePerson(person.id);
+      props.setPersons(
+        props.personsToShow.filter((p: IPerson) => p.id !== person.id)
+      );
+    }
   };
 
   return (
