@@ -68,3 +68,23 @@ button.small-btn {
   margin: 0.2em;
   margin-left: 1em;
 }
+
+.error {
+  color: red;
+  background: slategray;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: lightgreen;
+  background: slategray;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
