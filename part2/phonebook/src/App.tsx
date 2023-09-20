@@ -3,6 +3,7 @@ import "./App.css";
 import { Filter } from "./components/Filter";
 import { PersonForm } from "./components/PersonForm";
 import { Persons, IPerson } from "./components/Persons";
+import { Notification } from "./components/Notification";
 import personService from "./services/Persons";
 
 function App() {
@@ -11,6 +12,8 @@ function App() {
   const [newNumber, setNewNumber] = useState("");
   const [filterString, setFilterString] = useState("");
   const [showAll, setShowAll] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [popupType, setPopupType] = useState(null);
 
   useEffect(() => {
     personService
@@ -47,6 +50,15 @@ function App() {
             );
             setNewName("");
             setNewNumber("");
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `Information of ${existingPerson.name} has already been removed.`
+            );
+            setPopupType("error");
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
           });
       }
     } else {
@@ -56,6 +68,11 @@ function App() {
           setPersons(persons.concat(returnedPerson));
           setNewName("");
           setNewNumber("");
+          setErrorMessage(`Added ${returnedPerson.name}.`);
+          setPopupType("success");
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 2000);
         });
     }
   };
@@ -80,6 +97,7 @@ function App() {
   return (
     <>
       <h1 className="header">Phonebook</h1>
+      <Notification message={errorMessage} popupType={popupType} />
       <Filter filterString={filterString} filterNames={filterNames} />
       <h2 className="header">Add new entry</h2>
       <PersonForm
