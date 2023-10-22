@@ -40,6 +40,15 @@ app.get(
   }
 );
 
+app.get("/info", (request: any, response: any) => {
+  const phonebookEntries = personsInitialData.length;
+  const currentTime = new Date();
+
+  response.send(
+    `<div><p>Phonebook has info for ${phonebookEntries} people</p><p>${currentTime}</p></div>`
+  );
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
