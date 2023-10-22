@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const personsInitialData = [
+let personsInitialData = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -68,6 +68,28 @@ app.get(
     } else {
       response.status(404).send({ error: "Person not found." });
     }
+  }
+);
+
+app.delete(
+  "/api/persons/:id",
+  (
+    request: { params: { id: any } },
+    response: {
+      status: (arg0: number) => {
+        (): any;
+        new (): any;
+        end: { (): void; new (): any };
+      };
+    }
+  ) => {
+    const id = Number(request.params.id);
+
+    personsInitialData = personsInitialData.filter(
+      (person) => person.id !== id
+    );
+
+    response.status(204).end();
   }
 );
 
