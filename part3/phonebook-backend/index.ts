@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 let personsInitialData = [
   {
     id: 1,
@@ -23,6 +25,10 @@ let personsInitialData = [
     number: "39-23-6423122",
   },
 ];
+
+const generateId = () => {
+  return Math.floor(Math.random() * 10 ** 8 + 1);
+};
 
 app.get("/", (request: any, response: { send: (arg0: string) => void }) => {
   response.send("<h1>Hello World!</h1>");
@@ -66,7 +72,7 @@ app.get(
     if (foundPerson) {
       response.json(foundPerson);
     } else {
-      response.status(404).send({ error: "Person not found." });
+      response.status(404).json({ error: "Person not found." });
     }
   }
 );
@@ -90,6 +96,45 @@ app.delete(
     );
 
     response.status(204).end();
+  }
+);
+
+app.post(
+  "/api/persons",
+  (
+    request: { body: any },
+    response: {
+      status: (arg0: number) => {
+        (): any;
+        new (): any;
+        json: { (arg0: { error: string }): any; new (): any };
+      };
+      json: (arg0: { id: number; name: any; number: any }) => void;
+    }
+  ) => {
+    const body = request.body;
+
+    if (!body.name || !body.number) {
+      return response.status(400).json({
+        error: "Name and/or Number missing",
+      });
+    }
+
+    if (personsInitialData.find((person) => person.name === body.name)) {
+      return response.status(400).json({
+        error: "Name must be unique.",
+      });
+    }
+
+    const newPerson = {
+      id: generateId(),
+      name: body.name,
+      number: body.number,
+    };
+
+    personsInitialData = personsInitialData.concat(newPerson);
+
+    response.json(newPerson);
   }
 );
 
