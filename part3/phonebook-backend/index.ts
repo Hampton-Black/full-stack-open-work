@@ -138,6 +138,21 @@ app.post(
   }
 );
 
+const unknownEndpoint = (
+  request: any,
+  response: {
+    status: (arg0: number) => {
+      (): any;
+      new (): any;
+      send: { (arg0: { error: string }): void; new (): any };
+    };
+  }
+) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
+app.use(unknownEndpoint);
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
