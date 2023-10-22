@@ -3,7 +3,16 @@ const morgan = require("morgan");
 
 const app = express();
 
-app.use(morgan("tiny"));
+// logger configuration
+morgan.token("content", function (req: { body: any }, res: any) {
+  return JSON.stringify(req.body);
+});
+
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms :content"
+  )
+);
 app.use(express.json());
 
 let personsInitialData = [
