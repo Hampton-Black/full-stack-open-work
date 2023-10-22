@@ -40,7 +40,7 @@ app.get(
   }
 );
 
-app.get("/info", (request: any, response: any) => {
+app.get("/info", (request: any, response: { send: (arg0: string) => void }) => {
   const phonebookEntries = personsInitialData.length;
   const currentTime = new Date();
 
@@ -48,6 +48,28 @@ app.get("/info", (request: any, response: any) => {
     `<div><p>Phonebook has info for ${phonebookEntries} people</p><p>${currentTime}</p></div>`
   );
 });
+
+app.get(
+  "/api/persons/:id",
+  (
+    request: { params: { id: any } },
+    response: {
+      [x: string]: any;
+      json: (
+        arg0: { id: number; name: string; number: string } | undefined
+      ) => void;
+    }
+  ) => {
+    const id = Number(request.params.id);
+    const foundPerson = personsInitialData.find((person) => person.id === id);
+
+    if (foundPerson) {
+      response.json(foundPerson);
+    } else {
+      response.status(404).send({ error: "Person not found." });
+    }
+  }
+);
 
 const PORT = 3001;
 app.listen(PORT, () => {
