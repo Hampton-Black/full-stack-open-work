@@ -6,8 +6,12 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "build:ui": "rm -rf dist && cd ../../part2/phonebook/ && pnpm run build && cp -r dist ../../part3/phonebook-backend",
+    "deploy": "fly deploy",
+    "deploy:full": "pnpm run build && pnpm run build:ui && pnpm run deploy",
     "start": "node index.js",
     "dev": "nodemon --esm index.ts",
+    "logs:prod": "fly logs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
