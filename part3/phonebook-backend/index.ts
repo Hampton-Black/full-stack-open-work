@@ -1,6 +1,6 @@
-const cors = require("cors");
-const express = require("express");
-const morgan = require("morgan");
+import cors from "cors";
+import express from "express";
+import morgan from "morgan";
 
 const app = express();
 
@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 
 // logger configuration
-morgan.token("content", function (req: { body: any }, res: any) {
+morgan.token("content", function (req: any, _res: any) {
   return JSON.stringify(req.body);
 });
 
@@ -49,23 +49,15 @@ const generateId = () => {
   return Math.floor(Math.random() * 10 ** 8 + 1);
 };
 
-app.get("/", (request: any, response: { send: (arg0: string) => void }) => {
+app.get("/", (_request: any, response: any) => {
   response.send("<h1>Hello World!</h1>");
 });
 
-app.get(
-  "/api/persons",
-  (
-    request: any,
-    response: {
-      json: (arg0: { id: number; name: string; number: string }[]) => void;
-    }
-  ) => {
-    response.json(personsInitialData);
-  }
-);
+app.get("/api/persons", (_request: any, response: any) => {
+  response.json(personsInitialData);
+});
 
-app.get("/info", (request: any, response: { send: (arg0: string) => void }) => {
+app.get("/info", (_request: any, response: any) => {
   const phonebookEntries = personsInitialData.length;
   const currentTime = new Date();
 
@@ -76,15 +68,7 @@ app.get("/info", (request: any, response: { send: (arg0: string) => void }) => {
 
 app.get(
   "/api/persons/:id",
-  (
-    request: { params: { id: any } },
-    response: {
-      [x: string]: any;
-      json: (
-        arg0: { id: number; name: string; number: string } | undefined
-      ) => void;
-    }
-  ) => {
+  (request: { params: { id: any } }, response: any) => {
     const id = Number(request.params.id);
     const foundPerson = personsInitialData.find((person) => person.id === id);
 
@@ -98,16 +82,7 @@ app.get(
 
 app.delete(
   "/api/persons/:id",
-  (
-    request: { params: { id: any } },
-    response: {
-      status: (arg0: number) => {
-        (): any;
-        new (): any;
-        end: { (): void; new (): any };
-      };
-    }
-  ) => {
+  (request: { params: { id: any } }, response: any) => {
     const id = Number(request.params.id);
 
     personsInitialData = personsInitialData.filter(
@@ -118,61 +93,41 @@ app.delete(
   }
 );
 
-app.post(
-  "/api/persons",
-  (
-    request: { body: any },
-    response: {
-      status: (arg0: number) => {
-        (): any;
-        new (): any;
-        json: { (arg0: { error: string }): any; new (): any };
-      };
-      json: (arg0: { id: number; name: any; number: any }) => void;
-    }
-  ) => {
-    const body = request.body;
+app.post("/api/persons", (request: any, response: any) => {
+  const body = request.body;
 
-    if (!body.name || !body.number) {
-      return response.status(400).json({
-        error: "Name and/or Number missing",
-      });
-    }
-
-    if (personsInitialData.find((person) => person.name === body.name)) {
-      return response.status(400).json({
-        error: "Name must be unique.",
-      });
-    }
-
-    const newPerson = {
-      id: generateId(),
-      name: body.name,
-      number: body.number,
-    };
-
-    personsInitialData = personsInitialData.concat(newPerson);
-
-    response.json(newPerson);
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "Name and/or Number missing",
+    });
   }
-);
 
-const unknownEndpoint = (
-  request: any,
-  response: {
-    status: (arg0: number) => {
-      (): any;
-      new (): any;
-      send: { (arg0: { error: string }): void; new (): any };
-    };
+  if (personsInitialData.find((person) => person.name === body.name)) {
+    return response.status(400).json({
+      error: "Name must be unique.",
+    });
   }
-) => {
+
+  const newPerson = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  };
+
+  personsInitialData = personsInitialData.concat(newPerson);
+
+  response.json(newPerson);
+});
+
+const unknownEndpoint = (_request: any, response: any) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 
 app.use(unknownEndpoint);
 
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const PORT = Number(process.env.PORT) || 3000;
+const HOST = "0.0.0.0";
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server running on port ${HOST}:${PORT}`);
 });
