@@ -1,4 +1,12 @@
-export const PersonForm = (props) => {
+import { FormEventHandler } from "react";
+
+export const PersonForm = (props: {
+  addName: FormEventHandler<HTMLFormElement> | undefined;
+  newName: string | number | readonly string[] | undefined;
+  setNewName: (arg0: string) => void;
+  newNumber: string | number | readonly string[] | undefined;
+  setNewNumber: (arg0: string) => void;
+}) => {
   return (
     <form className="form-container" onSubmit={props.addName}>
       <div>

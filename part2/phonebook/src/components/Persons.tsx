@@ -6,7 +6,10 @@ export interface IPerson {
   number?: string;
 }
 
-export const Persons = (props) => {
+export const Persons = (props: {
+  setPersons: (arg0: IPerson[]) => void;
+  personsToShow: IPerson[];
+}) => {
   const deletePerson = async (person: IPerson) => {
     if (confirm(`Delete ${person.name}?`)) {
       await personService.deletePerson(person.id);

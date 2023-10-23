@@ -12,8 +12,8 @@ function App() {
   const [newNumber, setNewNumber] = useState("");
   const [filterString, setFilterString] = useState("");
   const [showAll, setShowAll] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [popupType, setPopupType] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [popupType, setPopupType] = useState("");
 
   useEffect(() => {
     personService
@@ -51,13 +51,13 @@ function App() {
             setNewName("");
             setNewNumber("");
           })
-          .catch((error) => {
+          .catch(() => {
             setErrorMessage(
               `Information of ${existingPerson.name} has already been removed.`
             );
             setPopupType("error");
             setTimeout(() => {
-              setErrorMessage(null);
+              setErrorMessage("");
             }, 5000);
           });
       }
@@ -71,7 +71,7 @@ function App() {
           setErrorMessage(`Added ${returnedPerson.name}.`);
           setPopupType("success");
           setTimeout(() => {
-            setErrorMessage(null);
+            setErrorMessage("");
           }, 2000);
         });
     }

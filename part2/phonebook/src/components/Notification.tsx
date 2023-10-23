@@ -5,7 +5,7 @@ export const Notification = ({
   message: string;
   popupType: string;
 }) => {
-  if (message === null) {
+  if (message === "") {
     return null;
   }
 
