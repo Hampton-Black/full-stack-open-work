@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IPerson } from "./../components/Persons";
 
-const baseUrl = "http://localhost:3001/api/persons";
+const baseUrl = "/api/persons";
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
