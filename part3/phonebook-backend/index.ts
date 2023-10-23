@@ -1,7 +1,11 @@
+const cors = require("cors");
 const express = require("express");
 const morgan = require("morgan");
 
 const app = express();
+
+/****************** Middleware ***********************/
+app.use(cors());
 
 // logger configuration
 morgan.token("content", function (req: { body: any }, res: any) {
@@ -13,7 +17,10 @@ app.use(
     ":method :url :status :res[content-length] - :response-time ms :content"
   )
 );
+
 app.use(express.json());
+
+/****************** Middleware ***********************/
 
 let personsInitialData = [
   {
