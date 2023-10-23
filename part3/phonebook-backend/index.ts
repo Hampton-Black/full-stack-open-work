@@ -20,6 +20,8 @@ app.use(
 
 app.use(express.json());
 
+app.use(express.static("dist"));
+
 /****************** Middleware ***********************/
 
 let personsInitialData = [

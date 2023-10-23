@@ -10,6 +10,7 @@ morgan.token("content", function (req, _res) {
 });
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :content"));
 app.use(express.json());
+app.use(express.static("dist"));
 /****************** Middleware ***********************/
 let personsInitialData = [
     {
@@ -88,7 +89,6 @@ const unknownEndpoint = (_request, response) => {
 app.use(unknownEndpoint);
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = "0.0.0.0";
-console.log("PORT env var: ", process.env.PORT);
 app.listen(PORT, HOST, () => {
     console.log(`Server running on port ${HOST}:${PORT}`);
 });
