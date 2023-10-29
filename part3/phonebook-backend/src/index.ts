@@ -61,8 +61,13 @@ app.get("/api/persons", (_request: Request, response: Response) => {
   });
 });
 
-app.get("/info", (_request: Request, response: Response) => {
-  const phonebookEntries = personsInitialData.length;
+app.get("/info", async (_request: Request, response: Response) => {
+  let phonebookEntries = null;
+
+  await Person.find({}).then((persons) => {
+    phonebookEntries = persons.length;
+  });
+
   const currentTime = new Date();
 
   response.send(
