@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import cors from "cors";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import { Person, personSchemaType } from "./models/person.js";
 
@@ -127,6 +127,23 @@ const unknownEndpoint = (_request: Request, response: Response) => {
 };
 
 app.use(unknownEndpoint);
+
+const errorHandler = (
+  error: any,
+  _request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "Malformatted ID" });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = "0.0.0.0";
