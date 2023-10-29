@@ -51,10 +51,8 @@ function App() {
             setNewName("");
             setNewNumber("");
           })
-          .catch(() => {
-            setErrorMessage(
-              `Information of ${existingPerson.name} has already been removed.`
-            );
+          .catch((error) => {
+            setErrorMessage(error.response.data.error);
             setPopupType("error");
             setTimeout(() => {
               setErrorMessage("");
@@ -73,6 +71,13 @@ function App() {
           setTimeout(() => {
             setErrorMessage("");
           }, 2000);
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.error);
+          setPopupType("error");
+          setTimeout(() => {
+            setErrorMessage("");
+          }, 5000);
         });
     }
   };
