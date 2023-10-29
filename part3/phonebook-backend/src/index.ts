@@ -1,6 +1,10 @@
+import dotenv from "dotenv";
 import cors from "cors";
-import express from "express";
+import express, { Request, Response } from "express";
 import morgan from "morgan";
+import { Person, personSchemaType } from "./models/person.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -8,7 +12,7 @@ const app = express();
 app.use(cors());
 
 // logger configuration
-morgan.token("content", function (req: any, _res: any) {
+morgan.token("content", function (req: Request, _res: Response) {
   return JSON.stringify(req.body);
 });
 
@@ -47,19 +51,17 @@ let personsInitialData = [
   },
 ];
 
-const generateId = () => {
-  return Math.floor(Math.random() * 10 ** 8 + 1);
-};
-
-app.get("/", (_request: any, response: any) => {
+app.get("/", (_request: Request, response: Response) => {
   response.send("<h1>Hello World!</h1>");
 });
 
-app.get("/api/persons", (_request: any, response: any) => {
-  response.json(personsInitialData);
+app.get("/api/persons", (_request: Request, response: Response) => {
+  Person.find({}).then((persons) => {
+    response.json(persons);
+  });
 });
 
-app.get("/info", (_request: any, response: any) => {
+app.get("/info", (_request: Request, response: Response) => {
   const phonebookEntries = personsInitialData.length;
   const currentTime = new Date();
 
@@ -68,34 +70,21 @@ app.get("/info", (_request: any, response: any) => {
   );
 });
 
-app.get(
-  "/api/persons/:id",
-  (request: { params: { id: any } }, response: any) => {
-    const id = Number(request.params.id);
-    const foundPerson = personsInitialData.find((person) => person.id === id);
+app.get("/api/persons/:id", (request: Request, response: Response) => {
+  Person.findById(request.params.id)
+    .then((person) => response.json(person))
+    .catch(() => response.status(404).json({ error: "Person not found." }));
+});
 
-    if (foundPerson) {
-      response.json(foundPerson);
-    } else {
-      response.status(404).json({ error: "Person not found." });
-    }
-  }
-);
+app.delete("/api/persons/:id", (request: Request, response: Response) => {
+  const id = Number(request.params.id);
 
-app.delete(
-  "/api/persons/:id",
-  (request: { params: { id: any } }, response: any) => {
-    const id = Number(request.params.id);
+  personsInitialData = personsInitialData.filter((person) => person.id !== id);
 
-    personsInitialData = personsInitialData.filter(
-      (person) => person.id !== id
-    );
+  response.status(204).end();
+});
 
-    response.status(204).end();
-  }
-);
-
-app.post("/api/persons", (request: any, response: any) => {
+app.post("/api/persons", async (request: Request, response: Response) => {
   const body = request.body;
 
   if (!body.name || !body.number) {
@@ -104,24 +93,27 @@ app.post("/api/persons", (request: any, response: any) => {
     });
   }
 
-  if (personsInitialData.find((person) => person.name === body.name)) {
-    return response.status(400).json({
-      error: "Name must be unique.",
-    });
-  }
+  // const isPersonUnique = await Person.find(
+  //   (person: personSchemaType) => person.name === body.name
+  // );
 
-  const newPerson = {
-    id: generateId(),
+  // if (isPersonUnique) {
+  //   return response.status(400).json({
+  //     error: "Name must be unique.",
+  //   });
+  // }
+
+  const newPerson = new Person({
     name: body.name,
     number: body.number,
-  };
+  });
 
-  personsInitialData = personsInitialData.concat(newPerson);
-
-  response.json(newPerson);
+  newPerson.save().then((savedPerson) => {
+    response.json(savedPerson);
+  });
 });
 
-const unknownEndpoint = (_request: any, response: any) => {
+const unknownEndpoint = (_request: Request, response: Response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 

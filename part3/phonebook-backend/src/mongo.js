@@ -1,12 +1,9 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { argv } from "process";
 
 dotenv.config();
 
-const password = process.env.MONGO_PASSWORD;
-
-const uri = `mongodb+srv://fullstack:${password}@cluster0.vwirmps.mongodb.net/phonebookApp?retryWrites=true&w=majority`;
+const uri = process.env.MONGODB_URI;
 
 mongoose.set("strictQuery", false);
 mongoose.connect(uri);
@@ -14,6 +11,15 @@ mongoose.connect(uri);
 const personSchema = new mongoose.Schema({
   name: String,
   number: String,
+});
+
+// configure JSON responses to omit _id and __v
+personSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
 });
 
 const Person = mongoose.model("Person", personSchema);
