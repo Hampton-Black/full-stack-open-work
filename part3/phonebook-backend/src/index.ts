@@ -104,16 +104,6 @@ app.post("/api/persons", async (request: Request, response: Response, next) => {
     });
   }
 
-  // const isPersonUnique = await Person.find(
-  //   (person: personSchemaType) => person.name === body.name
-  // );
-
-  // if (isPersonUnique) {
-  //   return response.status(400).json({
-  //     error: "Name must be unique.",
-  //   });
-  // }
-
   const newPerson = new Person({
     name: body.name,
     number: body.number,
