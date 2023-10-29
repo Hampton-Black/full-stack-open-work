@@ -70,21 +70,27 @@ app.get("/info", (_request: Request, response: Response) => {
   );
 });
 
-app.get("/api/persons/:id", (request: Request, response: Response) => {
+app.get("/api/persons/:id", (request: Request, response: Response, next) => {
   Person.findById(request.params.id)
-    .then((person) => response.json(person))
-    .catch(() => response.status(404).json({ error: "Person not found." }));
+    .then((person) => {
+      if (person) {
+        response.json(person);
+      } else {
+        response.status(404).json({ error: "Person not found." });
+      }
+    })
+    .catch((error) => next(error));
 });
 
-app.delete("/api/persons/:id", (request: Request, response: Response) => {
-  const id = Number(request.params.id);
-
-  personsInitialData = personsInitialData.filter((person) => person.id !== id);
-
-  response.status(204).end();
+app.delete("/api/persons/:id", (request: Request, response: Response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then((_result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
-app.post("/api/persons", async (request: Request, response: Response) => {
+app.post("/api/persons", async (request: Request, response: Response, next) => {
   const body = request.body;
 
   if (!body.name || !body.number) {
@@ -108,9 +114,12 @@ app.post("/api/persons", async (request: Request, response: Response) => {
     number: body.number,
   });
 
-  newPerson.save().then((savedPerson) => {
-    response.json(savedPerson);
-  });
+  newPerson
+    .save()
+    .then((savedPerson) => {
+      response.json(savedPerson);
+    })
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (_request: Request, response: Response) => {

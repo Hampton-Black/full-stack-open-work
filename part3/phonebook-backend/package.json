@@ -10,7 +10,7 @@
     "deploy": "fly deploy",
     "deploy:full": "pnpm run build && pnpm run build:ui && pnpm run deploy",
     "start": "node dist/index.js",
-    "dev": "nodemon dist/index.js",
+    "dev": "tsc && nodemon dist/index.js",
     "logs:prod": "fly logs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
