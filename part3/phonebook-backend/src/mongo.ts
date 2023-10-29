@@ -6,16 +6,24 @@ dotenv.config();
 const uri = process.env.MONGODB_URI;
 
 mongoose.set("strictQuery", false);
-mongoose.connect(uri);
+mongoose.connect(uri as string);
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
+  number: {
+    type: String,
+    minLength: 7,
+    required: true,
+  },
 });
 
 // configure JSON responses to omit _id and __v
 personSchema.set("toJSON", {
-  transform: (document, returnedObject) => {
+  transform: (_document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
