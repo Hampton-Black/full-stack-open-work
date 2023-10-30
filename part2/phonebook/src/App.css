@@ -81,6 +81,13 @@ button.small-btn {
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+  position: absolute;
+  top: 90%;
+  bottom: 10%;
+  left: 15%;
+  right: 20%;
+  width: 65%;
+  height: 10%;
 }
 
 .success {
@@ -91,4 +98,11 @@ button.small-btn {
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+  position: absolute;
+  top: 90%;
+  bottom: 10%;
+  left: 15%;
+  right: 20%;
+  width: 65%;
+  height: 10%;
 }
