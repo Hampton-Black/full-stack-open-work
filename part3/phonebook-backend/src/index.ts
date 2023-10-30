@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import { Person, personSchemaType } from "./models/person.js";
+import { Person } from "./models/person.js";
 
 dotenv.config();
 
@@ -27,29 +27,6 @@ app.use(express.json());
 app.use(express.static("dist"));
 
 /****************** Middleware ***********************/
-
-let personsInitialData = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
 
 app.get("/", (_request: Request, response: Response) => {
   response.send("<h1>Hello World!</h1>");
@@ -89,7 +66,7 @@ app.get("/api/persons/:id", (request: Request, response: Response, next) => {
 
 app.delete("/api/persons/:id", (request: Request, response: Response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then((_result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));
@@ -132,7 +109,7 @@ const unknownEndpoint = (_request: Request, response: Response) => {
 app.use(unknownEndpoint);
 
 const errorHandler = (
-  error: any,
+  error: Error,
   _request: Request,
   response: Response,
   next: NextFunction

@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+import mongoose, { Error } from "mongoose";
 
 dotenv.config();
 
@@ -10,10 +10,10 @@ console.log(`Connecting to ${uri} ...`);
 mongoose.set("strictQuery", false);
 mongoose
   .connect(uri as string)
-  .then((_result: any) => {
+  .then(() => {
     console.log("Connected to MongoDB!");
   })
-  .catch((error: { message: any }) => {
+  .catch((error: Error) => {
     console.error(`Error connecting to MongoDB: ${error.message}`);
   });
 
@@ -30,15 +30,16 @@ const personSchema = new mongoose.Schema({
       validator: function (v: string) {
         return /^\d{2,3}-\d*(-\d*)?$/.test(v);
       },
-      message: (props: any) => `${props.value} is not a valid phone number`,
+      message: (props: string) =>
+        `${props.valueOf} is not a valid phone number`,
     },
     required: [true, "phone number is required"],
   },
 });
 
 export type personSchemaType = {
-  name: String;
-  number: String;
+  name: string;
+  number: string;
 };
 
 // configure JSON responses to omit _id and __v
