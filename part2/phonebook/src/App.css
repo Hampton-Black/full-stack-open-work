@@ -56,7 +56,11 @@
 ul {
   list-style: none;
   text-align: right;
-  padding-left: 12em;
+  padding-left: 50px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 250px;
 }
 
 .header {
