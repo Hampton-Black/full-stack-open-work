@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import mongoose, { Error } from "mongoose";
+import mongoose, { Error, ValidatorProps } from "mongoose";
 
 dotenv.config();
 
@@ -30,8 +30,8 @@ const personSchema = new mongoose.Schema({
       validator: function (v: string) {
         return /^\d{2,3}-\d*(-\d*)?$/.test(v);
       },
-      message: (props: string) =>
-        `${props.valueOf} is not a valid phone number`,
+      message: (props: ValidatorProps) =>
+        `${props.value} is not a valid phone number`,
     },
     required: [true, "phone number is required"],
   },
